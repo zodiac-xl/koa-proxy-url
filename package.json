@@ -1,0 +1,45 @@
+{
+  "name": "koa-proxy-url",
+  "version": "1.0.0",
+  "description": "Proxy middleware for koa",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zodiac-xl/koa-proxy-url"
+  },
+  "keywords": [
+    "koa",
+    "middleware",
+    "proxy",
+    "url",
+    "free"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "iconv-lite": "^0.2.11",
+    "co-request": "^0.2.0"
+  },
+  "devDependencies": {
+    "coveralls": "~2.8.0",
+    "istanbul-harmony": "*",
+    "koa": "^0.5.2",
+    "koa-body-parser": "^1.1.0",
+    "koa-router": "^3.1.2",
+    "koa-static": "^1.4.3",
+    "mocha": "~1.17.1",
+    "should": "~3.1.3",
+    "supertest": "^0.10.0"
+  },
+  "author": {
+    "name": "zodiac",
+    "email": "wxlgame0105@163.com"
+  },
+  "bugs": {
+    "url": "https://github.com/zodiac-xl/koa-proxy-url/issues"
+  },
+  "homepage": "https://github.com/zodiac-xl/koa-proxy-url#readme",
+  "_npmUser": {
+    "name": "wuxiaolong",
+    "email": "wxlgame0105@163.com"
+  }
+}
