@@ -29,7 +29,6 @@ module.exports = function(options) {
     // if match option supplied, restrict proxy to that match
     if (options.match) {
       if (!this.path.match(options.match)) {
-        console.log(url)
         return yield* next;
       }
     }
