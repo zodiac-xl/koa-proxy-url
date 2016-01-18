@@ -7,7 +7,7 @@ var request = require('co-request').defaults({jar: true});
 module.exports = function (options) {
   options || (options = {});
 
-  if (!(options.host || options.map || options.url)) {
+  if (!((options.host || options.customHost) || options.map || options.url)) {
     throw new Error('miss options');
   }
 
@@ -24,9 +24,10 @@ module.exports = function (options) {
 
 
     //support host function
-    if (typeof options.host === 'function') {
-      options.host = options.host(this);
+    if (options.customHost && typeof options.customHost === 'function') {
+      options.host = options.customHost(this);
     }
+
 
     //support url function
     if (typeof options.url === 'function') {
@@ -40,7 +41,6 @@ module.exports = function (options) {
     if (!url) {
       return yield* next;
     }
-
 
 
     var parsedBody = getParsedBody(this);
