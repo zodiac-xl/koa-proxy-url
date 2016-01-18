@@ -2,9 +2,9 @@
 
 var join = require('url').resolve;
 var iconv = require('iconv-lite');
-var request = require('co-request').defaults({ jar: true });
+var request = require('co-request').defaults({jar: true});
 
-module.exports = function(options) {
+module.exports = function (options) {
   options || (options = {});
 
   if (!(options.host || options.map || options.url)) {
@@ -14,9 +14,24 @@ module.exports = function(options) {
   return function* proxy(next) {
     var url;
 
+
+    // if match option supplied, restrict proxy to that match
+    if (options.match) {
+      if (!this.path.match(options.match)) {
+        return yield* next;
+      }
+    }
+
+
+    //support host function
+    if (typeof options.host === 'function') {
+      options.host = options.host(this);
+    }
+
+    //support url function
     if (typeof options.url === 'function') {
       url = options.url(this);
-    }else{
+    } else {
       url = resolve(this.path, options);
       url = url + '?' + this.querystring;
     }
@@ -26,12 +41,7 @@ module.exports = function(options) {
       return yield* next;
     }
 
-    // if match option supplied, restrict proxy to that match
-    if (options.match) {
-      if (!this.path.match(options.match)) {
-        return yield* next;
-      }
-    }
+
 
     var parsedBody = getParsedBody(this);
     var opt = {
@@ -42,12 +52,8 @@ module.exports = function(options) {
       body: parsedBody
     };
     // set 'Host' header to options.host (without protocol prefix)
-    if(options.host){
-      if (typeof options.host === 'function') {
-        opt.headers.host = options.host(this);
-      }else{
-        opt.headers.host = options.host.slice(options.host.indexOf('://')+3)
-      }
+    if (options.host) {
+      opt.headers.host = options.host.slice(options.host.indexOf('://') + 3)
     }
 
     var requestThunk = request(opt);
@@ -99,14 +105,14 @@ function ignoreQuery(url) {
   return url ? url.split('?')[0] : null;
 }
 
-function getParsedBody(ctx){
+function getParsedBody(ctx) {
   var body = ctx.request.body;
-  if (body === undefined || body === null){
+  if (body === undefined || body === null) {
     return undefined;
   }
   var contentType = ctx.request.header['content-type'];
-  if (!Buffer.isBuffer(body) && typeof body !== 'string'){
-    if (contentType && contentType.indexOf('json') !== -1){
+  if (!Buffer.isBuffer(body) && typeof body !== 'string') {
+    if (contentType && contentType.indexOf('json') !== -1) {
       body = JSON.stringify(body);
     } else {
       body = body + '';
@@ -115,8 +121,8 @@ function getParsedBody(ctx){
   return body;
 }
 
-function pipeRequest(readable, requestThunk){
-  return function(cb){
+function pipeRequest(readable, requestThunk) {
+  return function (cb) {
     readable.pipe(requestThunk(cb));
   }
 }
