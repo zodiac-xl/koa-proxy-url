@@ -82,6 +82,7 @@ module.exports = function (options) {
             return;
         }
 
+        this.callBack && this.callBack(res);
         this.body = res.body;
     };
 };
