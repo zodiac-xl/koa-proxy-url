@@ -52,6 +52,13 @@ app.use(proxy({
         }
     },
 }));
+app.use(function *(next) {
+    this.callBack = function (res) {
+        console.log(res.statusCode);
+        console.log(res.body);
+        console.log(res.headers.date);
+      }
+})
 ```
 
 
